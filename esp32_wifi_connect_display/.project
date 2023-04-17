@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>esp32_http</name>
+	<name>esp32_ota_update</name>
 	<comment></comment>
 	<projects>
 	</projects>
