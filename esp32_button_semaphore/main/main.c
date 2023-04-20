@@ -3,6 +3,7 @@
 #include "esp_err.h"
 #include "freertos/timers.h"
 #include "DHT22.h"
+#include "wifi_reset_button.h"
 
 void
 app_main (void)
@@ -22,6 +23,8 @@ app_main (void)
 	ESP_ERROR_CHECK(ret);
 
 	wifi_app_start();
+
+	wifi_reset_button_config();
 
 	vTaskDelayUntil(&tick_wakeup, 1000 / portTICK_PERIOD_MS);
 

@@ -248,16 +248,13 @@ task_wifi_app (void * p_parameter)
 				case WIFI_APP_MSG_STA_CONNECTED_GOT_IP:
 					ESP_LOGI(g_tag, "WIFI_APP_MSG_STA_CONNECTED_GOT_IP");
 
-					event_bits = xEventGroupGetBits(gh_wifi_app_event_group);
+					xEventGroupSetBits(gh_wifi_app_event_group,
+									   g_wifi_app_sta_connected_got_ip_bit);
 
-					if (0 != (event_bits & g_wifi_app_sta_connected_got_ip_bit))
-					{
-						xEventGroupSetBits(gh_wifi_app_event_group,
-										   g_wifi_app_user_requested_sta_disconnect_bit);
-						rgb_led_wifi_connected();
-						http_server_monitor_send_message(HTTP_MSG_WIFI_CONNECT_SUCCESS);
-						event_bits = xEventGroupGetBits(gh_wifi_app_event_group);
-					}
+					rgb_led_wifi_connected();
+					http_server_monitor_send_message(HTTP_MSG_WIFI_CONNECT_SUCCESS);
+
+					event_bits = xEventGroupGetBits(gh_wifi_app_event_group);
 
 					// Save only if connecting from http server (not nvs)
 					//
@@ -309,6 +306,7 @@ task_wifi_app (void * p_parameter)
 					else
 					{
 						ESP_LOGI(g_tag, "Attempt failed, check wifi acces point availability!");
+						http_server_monitor_send_message(HTTP_MSG_WIFI_CONNECT_FAIL);
 					}
 
 					if (0 != (event_bits & g_wifi_app_sta_connected_got_ip_bit))
@@ -321,12 +319,17 @@ task_wifi_app (void * p_parameter)
 				case WIFI_APP_MSG_USER_REQUESTED_STA_DISCONNECT:
 					ESP_LOGI(g_tag, "WIFI_APP_MSG_USER_REQUESTED_STA_DISCONNECT");
 
-					xEventGroupSetBits(gh_wifi_app_event_group,
-									   g_wifi_app_user_requested_sta_disconnect_bit);
-					g_retry_number = MAX_CONNECTION_RETRIES;
-					ESP_ERROR_CHECK(esp_wifi_disconnect());
-					app_nvs_clear_sta_creds();
-					rgb_led_http_server_started();
+					event_bits = xEventGroupGetBits(gh_wifi_app_event_group);
+
+					if (0 != (event_bits & g_wifi_app_sta_connected_got_ip_bit))
+					{
+						xEventGroupSetBits(gh_wifi_app_event_group,
+										   g_wifi_app_user_requested_sta_disconnect_bit);
+						g_retry_number = MAX_CONNECTION_RETRIES;
+						ESP_ERROR_CHECK(esp_wifi_disconnect());
+						app_nvs_clear_sta_creds();
+						rgb_led_http_server_started();
+					}
 				break;
 
 				default:
