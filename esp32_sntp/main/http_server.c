@@ -78,6 +78,7 @@ static esp_err_t http_server_wifi_connect_status_json_handler(httpd_req_t * p_re
 static esp_err_t http_server_get_wifi_connect_info_json_handler(httpd_req_t * p_req);
 static esp_err_t http_server_wifi_disconnect_json_handler(httpd_req_t * p_req);
 static esp_err_t http_server_get_local_time_info_json_handler(httpd_req_t * p_req);
+static esp_err_t http_server_get_ap_ssid_json_handler(httpd_req_t * p_req);
 static void http_server_monitor(void * p_param);
 static void http_server_fw_update_reset_timer(void);
 
@@ -268,6 +269,15 @@ http_server_configure (void)
 		};
 
 		httpd_register_uri_handler(g_http_server_handle, &local_time_json);
+
+		httpd_uri_t ap_ssid_json = {
+			.uri = "/apSSID.json",
+			.method = HTTP_GET,
+			.handler = http_server_get_ap_ssid_json_handler,
+			.user_ctx = NULL
+		};
+
+		httpd_register_uri_handler(g_http_server_handle, &ap_ssid_json);
 
 		httpd_uri_t wifi_disconnect_json = {
 			.uri = "/wifiDisconnect.json",
@@ -693,6 +703,23 @@ http_server_get_local_time_info_json_handler (httpd_req_t * p_req)
 
 	httpd_resp_set_type(p_req, "application/json");
 	httpd_resp_send(p_req, local_time_json, strlen(local_time_json));
+
+	return ESP_OK;
+}
+
+static esp_err_t
+http_server_get_ap_ssid_json_handler (httpd_req_t * p_req)
+{
+	ESP_LOGI(g_tag, "/apSSID requested");
+
+	char ssid_json[50] = {0};
+	wifi_config_t * p_wifi_config = wifi_app_get_wifi_config();
+	esp_wifi_get_config(ESP_IF_WIFI_AP, p_wifi_config);
+	char * p_ssid = (char *) p_wifi_config->ap.ssid;
+
+	sprintf(ssid_json, "{\"ssid\":\"%s\"}", p_ssid);
+	httpd_resp_set_type(p_req, "application/json");
+	httpd_resp_send(p_req, ssid_json, strlen(ssid_json));
 
 	return ESP_OK;
 }

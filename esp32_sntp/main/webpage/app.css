@@ -38,6 +38,11 @@ h4 {
 	color: red;
 }
 
+#ap_ssid {
+	display:inline;
+	color: #1d3557;
+}
+
 #local_time {
 	display:inline;
 	color: #1d3557;
