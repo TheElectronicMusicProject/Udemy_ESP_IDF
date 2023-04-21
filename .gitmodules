@@ -1,3 +1,6 @@
 [submodule "esp32_sensor_demo/esp-idf-lib"]
 	path = esp32_sensor_demo/esp-idf-lib
 	url = https://github.com/UncleRus/esp-idf-lib.git
+[submodule "esp32_aws_iot/esp-aws-iot"]
+	path = esp32_aws_iot/esp-aws-iot
+	url = https://github.com/espressif/esp-aws-iot
