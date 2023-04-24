@@ -1,0 +1,15 @@
+dependencies:
+  espressif/esp_secure_cert_mgr:
+    component_hash: f5d83c8f600eb9854d6125f2dabd518ecba0970e44858291b3a29bf825e6e45f
+    source:
+      service_url: https://api.components.espressif.com/
+      type: service
+    version: 2.3.0
+  idf:
+    component_hash: null
+    source:
+      type: idf
+    version: 4.4.4
+manifest_hash: ddb0558aec009ef5fdb64128bf7c23bd5eba70d0bedeab73892409ac97d39a42
+target: esp32
+version: 1.0.0

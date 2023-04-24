@@ -7,3 +7,9 @@
 [submodule "esp32_aws_iot_updated_sdk/esp-aws-iot"]
 	path = esp32_aws_iot_updated_sdk/esp-aws-iot
 	url = https://github.com/espressif/esp-aws-iot
+[submodule "esp32_aws_iot_newest_sdk/esp-aws-iot"]
+	path = esp32_aws_iot_newest_sdk/esp-aws-iot
+	url = https://github.com/espressif/esp-aws-iot
+[submodule "esp32_aws_iot_newest_sdk/esp32_aws_iot_newest_sdk/esp-aws-iot"]
+	path = esp32_aws_iot_newest_sdk/esp32_aws_iot_newest_sdk/esp-aws-iot
+	url = https://github.com/espressif/esp-aws-iot
